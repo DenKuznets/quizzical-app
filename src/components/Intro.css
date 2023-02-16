@@ -1,8 +1,36 @@
-.title {
+.Intro__title {
   font-weight: 700;
-  font-size: 31px;
+  font-size: 2rem;
   line-height: 37px;
   text-align: center;
   color: #293264;
+  margin-bottom: 0.5rem;
 }
 
+.Intro__description {
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.2rem;
+  text-align: center;
+  color: #293264;
+  margin-bottom: 1.7rem;
+}
+
+.Intro__btn {
+  background: #4D5B9E;
+  border-radius: 15px;
+  width: 193px;
+  height: 52px;
+  border: none;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.2rem;
+  text-align: center;
+  cursor: pointer;
+  color: #F5F7FB;
+}
+
+.Intro__btn:active {
+  box-shadow: inset -5px -5px 10px rgba(0, 0, 0, 0.5),
+    inset 5px 5px 10px rgba(0, 0, 0, 0.5);
+}

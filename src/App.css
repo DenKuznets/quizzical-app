@@ -7,4 +7,25 @@
   align-items: center;
   margin: auto;
   min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+  background: #F5F7FB;
+  background-image: url(./assets/blob-blue.png), url(./assets/blob-yellow.png);
+  background-repeat: no-repeat;
+  background-position-x: 0, 100%;
+  background-position-y: 100%, 0;
+  background-size: 25%;
+}
+
+:root {
+  font-size: 16px;
+}
+
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Karla', sans-serif;
 }
