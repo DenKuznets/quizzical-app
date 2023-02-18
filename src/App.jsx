@@ -4,7 +4,7 @@ import Intro from "./components/Intro";
 import Questions from "./components/Questions";
 
 function App() {
-  const [gameStarted, setGameStarted] = useState(false);
+  const [gameStarted, setGameStarted] = useState(true);
   return (
     <div className="App">
       <div className="container">{gameStarted ? <Questions /> : <Intro />}</div>
