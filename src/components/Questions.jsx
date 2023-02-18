@@ -33,7 +33,7 @@ export default function Questions() {
         </div>
       </div>
       <div className="check-answers-container">
-        {gameOver ? <Result /> : <Button text="Check answers" />}
+        {gameOver ? <Result correct="3" /> : <Button className='check-answers-btn' text="Check answers" />}
       </div>
     </div>
   );

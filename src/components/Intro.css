@@ -1,4 +1,4 @@
-.Intro__title {
+.intro__title {
   font-weight: 700;
   font-size: 2rem;
   line-height: 37px;
@@ -7,7 +7,7 @@
   margin-bottom: 0.5rem;
 }
 
-.Intro__description {
+.intro__description {
   font-style: normal;
   font-weight: 400;
   line-height: 1.2rem;
@@ -16,7 +16,7 @@
   margin-bottom: 1.7rem;
 }
 
-.Intro__btn {
+.intro__btn {
   background: #4D5B9E;
   border-radius: 15px;
   width: 193px;
@@ -28,9 +28,4 @@
   text-align: center;
   cursor: pointer;
   color: #F5F7FB;
-}
-
-.Intro__btn:active {
-  box-shadow: inset -5px -5px 10px rgba(0, 0, 0, 0.5),
-    inset 5px 5px 10px rgba(0, 0, 0, 0.5);
 }
