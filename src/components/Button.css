@@ -1,0 +1,14 @@
+.btn {
+  width: 120px;
+  height: 35px;
+  background: #4D5B9E;
+  border-radius: 10px;
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 10.24px;
+  line-height: 12px;
+  text-align: center;
+  color: #F5F7FB;
+  border: none;
+}

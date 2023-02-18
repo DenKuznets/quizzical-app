@@ -1,30 +1,39 @@
+import { useState } from "react";
 import "./Questions.css";
+import Button from "./Button";
+import Result from "./Result";
 
 export default function Questions() {
+  const [gameOver, setGameOver] = useState(true);
   return (
     <div className="questions">
-      <div className="question-card">
-        <h1 className="question-card__question">
-          How would one say goodbye in Spanish?
-        </h1>
-        <ul className="question-card__answers">
-          <li className="question-card__answer">answer 1</li>
-          <li className="question-card__answer"> 2</li>
-          <li className="question-card__answer">answerdadasdas 3</li>
-          <li className="question-card__answer">answer 4</li>
-        </ul>
+      <div className="questions-container">
+        <div className="question-card">
+          <h1 className="question-card__question">
+            How would one say goodbye in Spanish?
+          </h1>
+          <ul className="question-card__answers">
+            <li className="question-card__answer selected-answer">answer 1</li>
+            <li className="question-card__answer"> 2</li>
+            <li className="question-card__answer">answerdadasdas 3</li>
+            <li className="question-card__answer">answer 4</li>
+          </ul>
+        </div>
+        <div className="question-card">
+          <h1 className="question-card__question">
+            How would one say goodbye in Spanish? How would one say goodbye in
+            Spanish?
+          </h1>
+          <ul className="question-card__answers">
+            <li className="question-card__answer">answer 1</li>
+            <li className="question-card__answer"> 2</li>
+            <li className="question-card__answer">answerdadasdas 3</li>
+            <li className="question-card__answer">answer 4</li>
+          </ul>
+        </div>
       </div>
-      <div className="question-card">
-        <h1 className="question-card__question">
-          How would one say goodbye in Spanish? How would one say goodbye in
-          Spanish?
-        </h1>
-        <ul className="question-card__answers">
-          <li className="question-card__answer">answer 1</li>
-          <li className="question-card__answer"> 2</li>
-          <li className="question-card__answer">answerdadasdas 3</li>
-          <li className="question-card__answer">answer 4</li>
-        </ul>
+      <div className="check-answers-container">
+        {gameOver ? <Result /> : <Button text="Check answers" />}
       </div>
     </div>
   );
