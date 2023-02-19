@@ -25,9 +25,9 @@ export default function Questions() {
             Spanish?
           </h1>
           <ul className="question-card__answers">
-            <li className="question-card__answer">answer 1</li>
-            <li className="question-card__answer"> 2</li>
-            <li className="question-card__answer">answerdadasdas 3</li>
+            <li className="question-card__answer right-answer">answer 1</li>
+            <li className="question-card__answer wrong-user-answer"> 2</li>
+            <li className="question-card__answer wrong-answer">answerdadasdas 3</li>
             <li className="question-card__answer">answer 4</li>
           </ul>
         </div>

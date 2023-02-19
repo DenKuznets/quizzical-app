@@ -67,6 +67,22 @@
   border: none;
 }
 
+.wrong-user-answer {
+  background: #F8BCBC;
+  border: none;
+  opacity: .5;
+}
+
+.wrong-answer {
+  opacity: 0.5;
+}
+
+.right-answer {
+  background: #94D7A2;
+  border: none;
+  color: #293264;
+}
+
 .check-answers-container {
   margin-top: 1.2rem;
 }
