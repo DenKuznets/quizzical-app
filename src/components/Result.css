@@ -18,4 +18,11 @@
 .result__btn {
   width: 104px;
   height: 30px;
+  font-size: .65rem;
+  line-height: .8rem;
+  border-radius: 10px;
+  font-style: normal;
+  font-weight: 600;
+  text-align: center;
+  color: #F5F7FB;
 }
