@@ -12,7 +12,7 @@ export default function Questions(props) {
     for (let i = 0; i < 5; i++) {
       arr.push(Math.floor(Math.random() * 4));
     }
-    console.log(arr);
+    console.log('correct answers',arr);
     return arr;
   });
 
@@ -29,10 +29,22 @@ export default function Questions(props) {
   }
 
   function checkAnswers() {
-    console.log("check answers");
-    let answers = document.querySelectorAll(".selected-answer");
-    console.log(answers);
-    // сравнить содержимое выбранного ответа
+    setGameOver(true);
+    let answersLists = document.querySelectorAll(".question-card__answers");
+    for (let j = 0; j < answersLists.length; j++) {
+      const list = answersLists[j];
+      for (let i = 0; i < list.children.length; i++) {
+        // всем правильным ответам даем класс "правильный ответ"
+        if (i === correctAnswersPlacement[j]) {
+          list.children[i].classList.add("right-answer");
+          // всем остальным ответам даем класс либо "неправильный ответ" либо "пользовательский неправильный ответ"
+        } else if (list.children[i].classList.contains('selected-answer')) {
+          list.children[i].classList.add("wrong-user-answer");
+        } else {
+          list.children[i].classList.add("wrong-answer");
+        }
+      }
+    }
   }
 
   const questionCards = props.questions.map((qObj, index) => {
