@@ -14,6 +14,10 @@ export default function Questions(props) {
     }
   }
 
+  function checkAnswers() {
+    console.log('check answers');
+  }
+
   // функция перемешивающая массив ответов, что бы правильный ответ всегда был на случайной позиции
   function shuffle(array) {
     let newArr = [...array];
@@ -57,7 +61,7 @@ export default function Questions(props) {
         {gameOver ? (
           <Result correct="3" />
         ) : (
-          <Button className="check-answers-btn" text="Check answers" />
+          <Button onClick={checkAnswers} className="check-answers-btn" text="Check answers" />
         )}
       </div>
     </div>
