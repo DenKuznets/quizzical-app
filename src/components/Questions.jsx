@@ -7,9 +7,11 @@ import { nanoid } from "nanoid";
 export default function Questions(props) {
   const [gameOver, setGameOver] = useState(false);
 
-  function selectAnswer(e) {
-    console.log(e.target);
-    e.target.classList.add("selected-answer");
+  function selectAnswer(e) { 
+    for (let li of e.target.closest("ul").children) {
+      if (e.target === li) e.target.classList.add("selected-answer");
+      else li.classList.remove("selected-answer");
+    }
   }
 
   // функция перемешивающая массив ответов, что бы правильный ответ всегда был на случайной позиции
