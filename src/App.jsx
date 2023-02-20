@@ -3,9 +3,11 @@ import "./App.css";
 import Intro from "./components/Intro";
 import Questions from "./components/Questions";
 import { localQuestions } from "./localQuestions";
+import Button from "./components/Button";
+import Result from "./components/Result";
 
 function App() {
-  const [gameStarted, setGameStarted] = useState(true);
+  const [showIntro, setShowIntro] = useState(false);
   const [questions, setQuestions] = useState([]);
   const [gameOver, setGameOver] = useState(false);
   // запоминаем расположение правильных ответов
@@ -33,10 +35,6 @@ function App() {
   useEffect(() => {
     setQuestions(localQuestions);
   }, []);
-
-  function startGame() {
-    setGameStarted(true);
-  }
 
   function selectAnswer(e) {
     const sel = "selected-answer";
@@ -72,16 +70,27 @@ function App() {
   return (
     <div className="App">
       <div className="container">
-        {gameStarted ? (
-          <Questions
-            questions={questions}
-            gameOver={gameOver}
-            selectAnswer={selectAnswer}
-            checkAnswers={checkAnswers}
-            correctAnswersPlacement={correctAnswersPlacement}
-          />
+        {showIntro ? (
+          <Intro showIntro={() => setShowIntro(false)} />
         ) : (
-          <Intro startGame={startGame} />
+          <>
+            <Questions
+              questions={questions}
+              selectAnswer={selectAnswer}
+              correctAnswersPlacement={correctAnswersPlacement}
+            />
+            <div className="check-answers-container">
+              {gameOver ? (
+                <Result correct="3" />
+              ) : (
+                <Button
+                  onClick={checkAnswers}
+                  className="check-answers-btn"
+                  text="Check answers"
+                />
+              )}
+            </div>
+          </>
         )}
       </div>
     </div>

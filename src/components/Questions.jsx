@@ -1,4 +1,3 @@
-// import { useState } from "react";
 import "./Questions.css";
 import Button from "./Button";
 import Result from "./Result";
@@ -35,18 +34,7 @@ export default function Questions(props) {
   // создаем готовое игровое поле с вопросами и ответами
   return (
     <div className="questions">
-      <div className="questions-container">{questionCards}</div>
-      <div className="check-answers-container">
-        {props.gameOver ? (
-          <Result correct="3" />
-        ) : (
-          <Button
-            onClick={props.checkAnswers}
-            className="check-answers-btn"
-            text="Check answers"
-          />
-        )}
-      </div>
+      <div className="questions-container">{questionCards}</div>      
     </div>
   );
 }
