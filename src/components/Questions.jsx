@@ -7,6 +7,11 @@ import { nanoid } from "nanoid";
 export default function Questions(props) {
   const [gameOver, setGameOver] = useState(false);
 
+  function selectAnswer(e) {
+    console.log(e.target);
+    e.target.classList.add("selected-answer");
+  }
+
   // функция перемешивающая массив ответов, что бы правильный ответ всегда был на случайной позиции
   function shuffle(array) {
     let newArr = [...array];
@@ -23,7 +28,11 @@ export default function Questions(props) {
     // создаем массив элементов <li>ответ</li>
     const answersListItems = answersArray.map((answer) => {
       return (
-        <li key={nanoid()} className="question-card__answer">
+        <li
+          key={nanoid()}
+          className="question-card__answer"
+          onClick={selectAnswer}
+        >
           {answer}
         </li>
       );
