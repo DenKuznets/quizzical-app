@@ -5,7 +5,7 @@ import Questions from "./components/Questions";
 import { localQuestions } from "./localQuestions";
 
 function App() {
-  const [gameStarted, setGameStarted] = useState(true);
+  const [gameStarted, setGameStarted] = useState(false);
   const [questions, setQuestions] = useState(() => []);
   // useEffect(() => {
   //   fetch("https://opentdb.com/api.php?amount=5")
@@ -24,10 +24,14 @@ function App() {
     setQuestions(localQuestions);
   }, []);
 
+  function startGame() {
+    setGameStarted(true);
+  }
+
   return (
     <div className="App">
       <div className="container">
-        {gameStarted ? <Questions questions={questions} /> : <Intro />}
+        {gameStarted ? <Questions questions={questions} /> : <Intro startGame={startGame} />}
       </div>
     </div>
   );
