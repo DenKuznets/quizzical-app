@@ -33,6 +33,55 @@ function App() {
   //     });
   // }, []);
   useEffect(() => {
+    function shuffle(array) {
+      const newArr = [...array];
+      for (let i = newArr.length - 1; i > 0; i--) {
+        let j = Math.floor(Math.random() * (i + 1));
+        [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
+      }
+      return newArr;
+    }
+    // получили объект из апи
+    // из этого объекта делаем объект содержащий вопрос и 4 ответа (3 неправильных, 1 правильный) - он пойдет на маппинг в элемент questions.
+    // правильные ответ помещается в случайное место c помощью shuffle:
+    const answers = [];
+    for (let i = 0; i < localQuestions.length; i++){
+      answers.push(
+        shuffle([
+          ...localQuestions[i].incorrect_answers,
+          localQuestions[i].correct_answer,
+        ])
+      );
+    }
+    console.log(answers);
+    const gameState = localQuestions.map(qObj => {
+      // Создаем программно по образцу gameStateTest используя массив answers
+    })
+    const gameStateTest = [
+      {
+        question: localQuestions[0].question,
+        answer0: {
+          text: localQuestions[0].correct_answer,
+          classes: ["question-card__answer"],
+        },
+        answer1: {
+          text: localQuestions[0].incorrect_answers[0],
+          classes: ["question-card__answer"],
+        },
+        answer2: {
+          text: localQuestions[0].incorrect_answers[1],
+          classes: ["question-card__answer"],
+        },
+        answer3: {
+          text: localQuestions[0].incorrect_answers[2],
+          classes: ["question-card__answer"],
+        },        
+      },
+      {
+
+      }
+    ]; 
+
     setQuestions(localQuestions);
   }, []);
 

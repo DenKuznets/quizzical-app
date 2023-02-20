@@ -1,6 +1,4 @@
 import "./Questions.css";
-import Button from "./Button";
-import Result from "./Result";
 import { nanoid } from "nanoid";
 
 export default function Questions(props) { 
