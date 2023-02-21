@@ -6,26 +6,25 @@ export default function Questions(props) {
   const questionCards = props.gameState.map((qObj) => {
     // создаем массив элементов <li>ответ</li>
     const answersListItems = qObj.answers.map((answer) => {
-      return (
-        <li
-          key={nanoid()}
-          className={`question-card__answer 
-            ${props.gameOver && (answer.correct ? "correct-answer" : "wrong-answer")}             
-            ${
-              props.gameOver &&
-              answer.selected &&
-              !answer.correct &&
-              "wrong-user-answer"
-            }
-            ${answer.selected && "selected-answer"}`}
-          onClick={props.selectAnswer}
-        >
-          {answer.text}
-        </li>
-      );
+      let classes = "question-card__answer";
+      if (props.gameOver) {
+        classes += answer.correct ? " correct-answer " : " wrong-answer ";
+        if(answer.selected & !answer.correct) classes += " wrong-user-answer ";
+      } else if (answer.selected) {
+        classes += " selected-answer";
+      }
+        return (
+          <li
+            key={nanoid()}
+            className={classes}
+            onClick={props.selectAnswer}
+          >
+            {answer.text}
+          </li>
+        );
     });
 
-    // создаем готовую карточку с вопросом и 4 ответами
+    // создаем готовую карточку с вопросом и ответами
     return (
       <div key={nanoid()} data-questionnumber={qObj.questionNumber} className="question-card">
         <h1 className="question-card__question">{qObj.question}</h1>
@@ -34,7 +33,7 @@ export default function Questions(props) {
     );
   });
 
-  // создаем готовое игровое поле с вопросами и ответами
+  // создаем готовое игровое поле с карточками
   return (
     <div className="questions">
       <div className="questions-container">{questionCards}</div>      
