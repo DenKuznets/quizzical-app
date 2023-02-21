@@ -18,15 +18,6 @@ function App() {
     }
     return newArr;
   }
-  // запоминаем расположение правильных ответов
-  // const [correctAnswersPlacement] = useState(() => {
-  //   const arr = [];
-  //   for (let i = 0; i < 5; i++) {
-  //     arr.push(Math.floor(Math.random() * 4));
-  //   }
-  //   // console.log("correct answers", arr);
-  //   return arr;
-  // });
   // useEffect(() => {
   //   fetch("https://opentdb.com/api.php?amount=5")
   //     .then((response) => response.json())
@@ -42,40 +33,45 @@ function App() {
   // }, []);
   useEffect(() => {    
     // получили объект из апи
-    // из этого объекта делаем объект содержащий вопрос и 4 ответа (3 неправильных, 1 правильный) - он пойдет на маппинг в элемент questions.
-    // правильные ответ помещается в случайное место c помощью shuffle:
-    const answers = [];
-    for (let i = 0; i < localQuestions.length; i++) {
-      answers.push(
-        shuffle([
-          ...localQuestions[i].incorrect_answers,
-          localQuestions[i].correct_answer,
-        ])
-      );
-    }
-    const state = localQuestions.map((qObj, index) => {
+
+    // создаем массив объектов ответов
+    
+    const state = localQuestions.map(qObj => {
+      const incorrectAnwersObjArray = qObj.incorrect_answers.map(answer => {
+        return {
+          text: answer,
+          chosen: false,
+          correct: false,
+        }
+      });
+      const correctAnwerObj = {
+        text: qObj.correct_answer,
+        chosen: false,
+        correct: true,
+      };
+      const allAnswers = shuffle([...incorrectAnwersObjArray, correctAnwerObj]);
       return {
         question: qObj.question,
-        [`answer${index}`]: {
-          text: answers[index],
-          classes: ["question-card__answer"],
-        },
+        answers: allAnswers,
       };
     });
-    console.log(state);
+    // console.log(state);
     setGameState(state);
   }, []);
 
   function selectAnswer(e) {
     const sel = "selected-answer";
-    for (let li of e.target.closest("ul").children) {
-      if (e.target === li) {
-        e.target.classList.add(sel);
-      }
-      if (li !== e.target && li.classList.contains(sel)) {
-        li.classList.remove(sel);
-      }
-    }
+    console.log(e.target.innerHTML);
+    setGameState(prev => {
+      const newGameState = prev.map((qObj, index) => {
+        for (let answer of qObj.answers) {
+          console.log(answer);
+          if (e.target.innerHTML === answer) {
+            
+          }
+        }
+      })
+    })
   }
 
   function checkAnswers() {

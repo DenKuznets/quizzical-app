@@ -3,17 +3,16 @@ import { nanoid } from "nanoid";
 
 export default function Questions(props) { 
   if (!props.gameState) return "LOADING";
-  const questionCards = props.gameState.map((qObj, index) => {
-    const answers = qObj[`answer${index}`];
+  const questionCards = props.gameState.map((qObj) => {
     // создаем массив элементов <li>ответ</li>
-    const answersListItems = answers.text.map((answer) => {
+    const answersListItems = qObj.answers.map((answer) => {
       return (
         <li
           key={nanoid()}
-          className={ answers.classes }
+          className={`question-card__answer ${answer.chosen && "selected-answer"}`}
           onClick={props.selectAnswer}
         >
-          {answer}
+          {answer.text}
         </li>
       );
     });
