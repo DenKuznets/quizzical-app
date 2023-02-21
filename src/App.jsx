@@ -8,17 +8,25 @@ import Result from "./components/Result";
 
 function App() {
   const [showIntro, setShowIntro] = useState(false);
-  const [questions, setQuestions] = useState([]);
   const [gameOver, setGameOver] = useState(false);
-  // запоминаем расположение правильных ответов
-  const [correctAnswersPlacement] = useState(() => {
-    const arr = [];
-    for (let i = 0; i < 5; i++) {
-      arr.push(Math.floor(Math.random() * 4));
+  const [gameState, setGameState] = useState("");
+  function shuffle(array) {
+    const newArr = [...array];
+    for (let i = newArr.length - 1; i > 0; i--) {
+      let j = Math.floor(Math.random() * (i + 1));
+      [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
     }
-    console.log("correct answers", arr);
-    return arr;
-  });
+    return newArr;
+  }
+  // запоминаем расположение правильных ответов
+  // const [correctAnswersPlacement] = useState(() => {
+  //   const arr = [];
+  //   for (let i = 0; i < 5; i++) {
+  //     arr.push(Math.floor(Math.random() * 4));
+  //   }
+  //   // console.log("correct answers", arr);
+  //   return arr;
+  // });
   // useEffect(() => {
   //   fetch("https://opentdb.com/api.php?amount=5")
   //     .then((response) => response.json())
@@ -32,20 +40,12 @@ function App() {
   //       console.log(err.message);
   //     });
   // }, []);
-  useEffect(() => {
-    function shuffle(array) {
-      const newArr = [...array];
-      for (let i = newArr.length - 1; i > 0; i--) {
-        let j = Math.floor(Math.random() * (i + 1));
-        [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
-      }
-      return newArr;
-    }
+  useEffect(() => {    
     // получили объект из апи
     // из этого объекта делаем объект содержащий вопрос и 4 ответа (3 неправильных, 1 правильный) - он пойдет на маппинг в элемент questions.
     // правильные ответ помещается в случайное место c помощью shuffle:
     const answers = [];
-    for (let i = 0; i < localQuestions.length; i++){
+    for (let i = 0; i < localQuestions.length; i++) {
       answers.push(
         shuffle([
           ...localQuestions[i].incorrect_answers,
@@ -53,36 +53,17 @@ function App() {
         ])
       );
     }
-    console.log(answers);
-    const gameState = localQuestions.map(qObj => {
-      // Создаем программно по образцу gameStateTest используя массив answers
-    })
-    const gameStateTest = [
-      {
-        question: localQuestions[0].question,
-        answer0: {
-          text: localQuestions[0].correct_answer,
+    const state = localQuestions.map((qObj, index) => {
+      return {
+        question: qObj.question,
+        [`answer${index}`]: {
+          text: answers[index],
           classes: ["question-card__answer"],
         },
-        answer1: {
-          text: localQuestions[0].incorrect_answers[0],
-          classes: ["question-card__answer"],
-        },
-        answer2: {
-          text: localQuestions[0].incorrect_answers[1],
-          classes: ["question-card__answer"],
-        },
-        answer3: {
-          text: localQuestions[0].incorrect_answers[2],
-          classes: ["question-card__answer"],
-        },        
-      },
-      {
-
-      }
-    ]; 
-
-    setQuestions(localQuestions);
+      };
+    });
+    console.log(state);
+    setGameState(state);
   }, []);
 
   function selectAnswer(e) {
@@ -98,22 +79,22 @@ function App() {
   }
 
   function checkAnswers() {
-    setGameOver(true);
-    let answersLists = document.querySelectorAll(".question-card__answers");
-    for (let j = 0; j < answersLists.length; j++) {
-      const list = answersLists[j];
-      for (let i = 0; i < list.children.length; i++) {
-        // всем правильным ответам даем класс "правильный ответ"
-        if (i === correctAnswersPlacement[j]) {
-          list.children[i].classList.add("right-answer");
-          // всем остальным ответам даем класс либо "неправильный ответ" либо "пользовательский неправильный ответ"
-        } else if (list.children[i].classList.contains("selected-answer")) {
-          list.children[i].classList.add("wrong-user-answer");
-        } else {
-          list.children[i].classList.add("wrong-answer");
-        }
-      }
-    }
+    // setGameOver(true);
+    // let answersLists = document.querySelectorAll(".question-card__answers");
+    // for (let j = 0; j < answersLists.length; j++) {
+    //   const list = answersLists[j];
+    //   for (let i = 0; i < list.children.length; i++) {
+    //     // всем правильным ответам даем класс "правильный ответ"
+    //     if (i === correctAnswersPlacement[j]) {
+    //       list.children[i].classList.add("right-answer");
+    //       // всем остальным ответам даем класс либо "неправильный ответ" либо "пользовательский неправильный ответ"
+    //     } else if (list.children[i].classList.contains("selected-answer")) {
+    //       list.children[i].classList.add("wrong-user-answer");
+    //     } else {
+    //       list.children[i].classList.add("wrong-answer");
+    //     }
+    //   }
+    // }
   }
 
   return (
@@ -124,9 +105,8 @@ function App() {
         ) : (
           <>
             <Questions
-              questions={questions}
+              gameState={gameState}
               selectAnswer={selectAnswer}
-              correctAnswersPlacement={correctAnswersPlacement}
             />
             <div className="check-answers-container">
               {gameOver ? (

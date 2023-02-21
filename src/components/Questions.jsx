@@ -2,17 +2,15 @@ import "./Questions.css";
 import { nanoid } from "nanoid";
 
 export default function Questions(props) { 
-  const questionCards = props.questions.map((qObj, index) => {
-    const answers = [...qObj.incorrect_answers];
-    // добавляем правильный ответ в запомненное место
-    answers.splice(props.correctAnswersPlacement[index], 0, qObj.correct_answer);
-
+  if (!props.gameState) return "LOADING";
+  const questionCards = props.gameState.map((qObj, index) => {
+    const answers = qObj[`answer${index}`];
     // создаем массив элементов <li>ответ</li>
-    const answersListItems = answers.map((answer) => {
+    const answersListItems = answers.text.map((answer) => {
       return (
         <li
           key={nanoid()}
-          className="question-card__answer"
+          className={ answers.classes }
           onClick={props.selectAnswer}
         >
           {answer}
