@@ -10,8 +10,7 @@ export default function Questions(props) {
         <li
           key={nanoid()}
           className={`question-card__answer 
-            ${props.gameOver && answer.correct && "correct-answer"} 
-            ${props.gameOver && !answer.correct && "wrong-answer"}
+            ${props.gameOver && (answer.correct ? "correct-answer" : "wrong-answer")}             
             ${
               props.gameOver &&
               answer.selected &&

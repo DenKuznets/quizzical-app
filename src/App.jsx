@@ -9,7 +9,8 @@ import Result from "./components/Result";
 function App() {
   const [showIntro, setShowIntro] = useState(false);
   const [gameOver, setGameOver] = useState(false);
-  const [gameState, setGameState] = useState("");
+  const [questions, setQuestions] = useState("");
+  const [correctAnswers, setCorrectAnswers] = useState(0);
   function shuffle(array) {
     const newArr = [...array];
     for (let i = newArr.length - 1; i > 0; i--) {
@@ -31,35 +32,48 @@ function App() {
   //       console.log(err.message);
   //     });
   // }, []);
-  useEffect(() => {
-    // получили объект из апи
 
-    const state = localQuestions.map((qObj, index) => {
-      const incorrectAnwersObjArray = qObj.incorrect_answers.map((answer) => {
-        return {
-          text: answer,
-          selected: false,
-          correct: false,
-        };
+  useEffect(() => {
+    fetch("https://opentdb.com/api.php?amount=5")
+      .then((response) => response.json())
+      .then((result) => {
+        if (result.response_code === 0) {
+          const state = result.results.map((qObj, index) => {
+            const incorrectAnwersObjArray = qObj.incorrect_answers.map(
+              (answer) => {
+                return {
+                  text: answer,
+                  selected: false,
+                  correct: false,
+                };
+              }
+            );
+            const correctAnwerObj = {
+              text: qObj.correct_answer,
+              selected: false,
+              correct: true,
+            };
+            const allAnswers = shuffle([
+              ...incorrectAnwersObjArray,
+              correctAnwerObj,
+            ]);
+            return {
+              question: qObj.question,
+              questionNumber: index,
+              answers: allAnswers,
+            };
+          });
+          setQuestions(state);
+        } else throw new Error(`response_code = ${result.response_code}`);
+      })
+      .catch((err) => {
+        console.log(err.message);
       });
-      const correctAnwerObj = {
-        text: qObj.correct_answer,
-        selected: false,
-        correct: true,
-      };
-      const allAnswers = shuffle([...incorrectAnwersObjArray, correctAnwerObj]);
-      return {
-        question: qObj.question,
-        questionNumber: index,
-        answers: allAnswers,
-      };
-    });
-    setGameState(state);
   }, []);
 
   function selectAnswer(e) {
     // внутри объекта с вопросами, находим нажатый ответ и меняем его selected на true а остальных ответов на false
-    setGameState((prev) =>
+    setQuestions((prev) =>
       prev.map((qObj) => ({
         ...qObj,
         answers: qObj.answers.map((answer) => {
@@ -80,24 +94,24 @@ function App() {
   }
 
   function checkAnswers() {
-    console.log('check answers');
     setGameOver(true);
-    
-    // let answersLists = document.querySelectorAll(".question-card__answers");
-    // for (let j = 0; j < answersLists.length; j++) {
-    //   const list = answersLists[j];
-    //   for (let i = 0; i < list.children.length; i++) {
-    //     // всем правильным ответам даем класс "правильный ответ"
-    //     if (i === correctAnswersPlacement[j]) {
-    //       list.children[i].classList.add("right-answer");
-    //       // всем остальным ответам даем класс либо "неправильный ответ" либо "пользовательский неправильный ответ"
-    //     } else if (list.children[i].classList.contains("selected-answer")) {
-    //       list.children[i].classList.add("wrong-user-answer");
-    //     } else {
-    //       list.children[i].classList.add("wrong-answer");
-    //     }
-    //   }
-    // }
+    let counter = 0;
+    for (let question of questions) {
+      for (let answer of question.answers) {
+        if (answer.selected && answer.correct) counter++;
+      }
+    }
+    setCorrectAnswers(counter);
+  }
+
+  function playAgain() {
+    setGameOver(false);
+    setQuestions((prev) =>
+      prev.map((qObj) => ({
+        ...qObj,
+        answers: qObj.answers.map((answer) => ({ ...answer, selected: false })),
+      }))
+    );
   }
 
   return (
@@ -107,10 +121,18 @@ function App() {
           <Intro showIntro={() => setShowIntro(false)} />
         ) : (
           <>
-            <Questions gameState={gameState} gameOver={gameOver} selectAnswer={selectAnswer} />
+            <Questions
+              gameState={questions}
+              gameOver={gameOver}
+              selectAnswer={selectAnswer}
+            />
             <div className="check-answers-container">
               {gameOver ? (
-                <Result correct="3" />
+                <Result
+                  playAgain={playAgain}
+                  correct={correctAnswers}
+                  questions={questions.length}
+                />
               ) : (
                 <Button
                   onClick={checkAnswers}
