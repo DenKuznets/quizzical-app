@@ -11,6 +11,7 @@ function App() {
   const [gameOver, setGameOver] = useState(false);
   const [questions, setQuestions] = useState("");
   const [correctAnswers, setCorrectAnswers] = useState(0);
+  const [fetchQuestions, setFetchQuestions] = useState(true);
   function shuffle(array) {
     const newArr = [...array];
     for (let i = newArr.length - 1; i > 0; i--) {
@@ -20,12 +21,50 @@ function App() {
     return newArr;
   }
 
+  useEffect(() => {
+    if (fetchQuestions) {
+      fetch("https://opentdb.com/api.php?amount=5")
+        .then((response) => response.json())
+        .then((result) => {
+          if (result.response_code === 0) {
+            const state = result.results.map((qObj, index) => {
+              const incorrectAnwersObjArray = qObj.incorrect_answers.map(
+                (answer) => {
+                  return {
+                    text: answer,
+                    selected: false,
+                    correct: false,
+                  };
+                }
+              );
+              const correctAnwerObj = {
+                text: qObj.correct_answer,
+                selected: false,
+                correct: true,
+              };
+              const allAnswers = shuffle([
+                ...incorrectAnwersObjArray,
+                correctAnwerObj,
+              ]);
+              return {
+                question: qObj.question,
+                questionNumber: index,
+                answers: allAnswers,
+              };
+            });
+            setQuestions(state);
+            setFetchQuestions(false);
+          } else throw new Error(`response_code = ${result.response_code}`);
+        })
+        .catch((err) => {
+          console.log(err.message);
+        });
+    }
+    
+  }, [fetchQuestions]);
+
   // useEffect(() => {
-  //   fetch("https://opentdb.com/api.php?amount=5")
-  //     .then((response) => response.json())
-  //     .then((result) => {
-  //       if (result.response_code === 0) {
-  //         const state = result.results.map((qObj, index) => {
+  //   const state = localQuestions.map((qObj, index) => {
   //           const incorrectAnwersObjArray = qObj.incorrect_answers.map(
   //             (answer) => {
   //               return {
@@ -51,41 +90,7 @@ function App() {
   //           };
   //         });
   //         setQuestions(state);
-  //       } else throw new Error(`response_code = ${result.response_code}`);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err.message);
-  //     });
-  // }, []);
-
-  useEffect(() => {
-    const state = localQuestions.map((qObj, index) => {
-            const incorrectAnwersObjArray = qObj.incorrect_answers.map(
-              (answer) => {
-                return {
-                  text: answer,
-                  selected: false,
-                  correct: false,
-                };
-              }
-            );
-            const correctAnwerObj = {
-              text: qObj.correct_answer,
-              selected: false,
-              correct: true,
-            };
-            const allAnswers = shuffle([
-              ...incorrectAnwersObjArray,
-              correctAnwerObj,
-            ]);
-            return {
-              question: qObj.question,
-              questionNumber: index,
-              answers: allAnswers,
-            };
-          });
-          setQuestions(state);
-  }, [])
+  // }, [])
 
   function selectAnswer(e) {
     // внутри объекта с вопросами, находим нажатый ответ и меняем его selected на true а остальных ответов на false
@@ -122,12 +127,13 @@ function App() {
 
   function playAgain() {
     setGameOver(false);
-    setQuestions((prev) =>
-      prev.map((qObj) => ({
-        ...qObj,
-        answers: qObj.answers.map((answer) => ({ ...answer, selected: false })),
-      }))
-    );
+    setFetchQuestions(true);
+    // setQuestions((prev) =>
+    //   prev.map((qObj) => ({
+    //     ...qObj,
+    //     answers: qObj.answers.map((answer) => ({ ...answer, selected: false })),
+    //   }))
+    // );
   }
 
   return (
