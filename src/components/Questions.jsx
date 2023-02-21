@@ -9,7 +9,16 @@ export default function Questions(props) {
       return (
         <li
           key={nanoid()}
-          className={`question-card__answer ${answer.chosen && "selected-answer"}`}
+          className={`question-card__answer 
+            ${props.gameOver && answer.correct && "correct-answer"} 
+            ${props.gameOver && !answer.correct && "wrong-answer"}
+            ${
+              props.gameOver &&
+              answer.selected &&
+              !answer.correct &&
+              "wrong-user-answer"
+            }
+            ${answer.selected && "selected-answer"}`}
           onClick={props.selectAnswer}
         >
           {answer.text}
@@ -19,7 +28,7 @@ export default function Questions(props) {
 
     // создаем готовую карточку с вопросом и 4 ответами
     return (
-      <div key={nanoid()} className="question-card">
+      <div key={nanoid()} data-questionnumber={qObj.questionNumber} className="question-card">
         <h1 className="question-card__question">{qObj.question}</h1>
         <ul className="question-card__answers">{answersListItems}</ul>
       </div>

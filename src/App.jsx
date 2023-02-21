@@ -31,51 +31,58 @@ function App() {
   //       console.log(err.message);
   //     });
   // }, []);
-  useEffect(() => {    
+  useEffect(() => {
     // получили объект из апи
 
-    // создаем массив объектов ответов
-    
-    const state = localQuestions.map(qObj => {
-      const incorrectAnwersObjArray = qObj.incorrect_answers.map(answer => {
+    const state = localQuestions.map((qObj, index) => {
+      const incorrectAnwersObjArray = qObj.incorrect_answers.map((answer) => {
         return {
           text: answer,
-          chosen: false,
+          selected: false,
           correct: false,
-        }
+        };
       });
       const correctAnwerObj = {
         text: qObj.correct_answer,
-        chosen: false,
+        selected: false,
         correct: true,
       };
       const allAnswers = shuffle([...incorrectAnwersObjArray, correctAnwerObj]);
       return {
         question: qObj.question,
+        questionNumber: index,
         answers: allAnswers,
       };
     });
-    // console.log(state);
     setGameState(state);
   }, []);
 
   function selectAnswer(e) {
-    const sel = "selected-answer";
-    console.log(e.target.innerHTML);
-    setGameState(prev => {
-      const newGameState = prev.map((qObj, index) => {
-        for (let answer of qObj.answers) {
-          console.log(answer);
-          if (e.target.innerHTML === answer) {
-            
+    // внутри объекта с вопросами, находим нажатый ответ и меняем его selected на true а остальных ответов на false
+    setGameState((prev) =>
+      prev.map((qObj) => ({
+        ...qObj,
+        answers: qObj.answers.map((answer) => {
+          // менять selected нужно только внутри нажатой карточки с вопросом а не во всех
+          if (
+            e.target.closest("div").dataset.questionnumber ===
+            qObj.questionNumber.toString()
+          ) {
+            return answer.text === e.target.innerText
+              ? { ...answer, selected: true }
+              : { ...answer, selected: false };
+          } else {
+            return { ...answer };
           }
-        }
-      })
-    })
+        }),
+      }))
+    );
   }
 
   function checkAnswers() {
-    // setGameOver(true);
+    console.log('check answers');
+    setGameOver(true);
+    
     // let answersLists = document.querySelectorAll(".question-card__answers");
     // for (let j = 0; j < answersLists.length; j++) {
     //   const list = answersLists[j];
@@ -100,10 +107,7 @@ function App() {
           <Intro showIntro={() => setShowIntro(false)} />
         ) : (
           <>
-            <Questions
-              gameState={gameState}
-              selectAnswer={selectAnswer}
-            />
+            <Questions gameState={gameState} gameOver={gameOver} selectAnswer={selectAnswer} />
             <div className="check-answers-container">
               {gameOver ? (
                 <Result correct="3" />
