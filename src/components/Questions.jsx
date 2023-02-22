@@ -19,6 +19,7 @@ export default function Questions(props) {
           className={classes}
           onClick={props.selectAnswer}
           data-answernumber={answer.answerNumber}
+          // текст ответа и ниже вопроса в h1 установлен через такой аттрибут, что бы преобразовать html символы
           dangerouslySetInnerHTML={{ __html: answer.text }}
         >
         </li>

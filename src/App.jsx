@@ -139,12 +139,6 @@ function App() {
   function playAgain() {
     setGameOver(false);
     setFetchQuestions(true);
-    // setQuestions((prev) =>
-    //   prev.map((qObj) => ({
-    //     ...qObj,
-    //     answers: qObj.answers.map((answer) => ({ ...answer, selected: false })),
-    //   }))
-    // );
   }
 
   return (
