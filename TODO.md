@@ -1,1 +1,3 @@
-переделать selectAnswer что бы кликнутный ответ находился не по сравнению текста вопроса а по номеру вопроса. Соответственно нужно при создании объекта "ответ" добавить поле "номер ответа"
+Выбор тем вопросов (если тема выбрана, только одна тема может быть запрошена. Ограничение https://opentdb.com/)
+Выбор количества вопросов на странице (макс 50. Ограничение https://opentdb.com/)
+Session tokens (сохранять токен пользовательской сессии в localStorage что бы не приходили повторяющиеся вопросы (токен сгорает после 6 месяцев неиспользования)) Нужно будет реализовать обработку кодов: Code 3: Token Not Found Session Token does not exist. Code 4: Token Empty Session Token has returned all possible questions for the specified query. Resetting the Token is necessary.
