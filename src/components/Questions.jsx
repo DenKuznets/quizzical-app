@@ -1,7 +1,7 @@
 import "./Questions.css";
 import { nanoid } from "nanoid";
 
-export default function Questions(props) { 
+export default function Questions(props) {
   if (!props.gameState) return "LOADING";
   const questionCards = props.gameState.map((qObj) => {
     // создаем массив элементов <li>ответ</li>
@@ -9,25 +9,34 @@ export default function Questions(props) {
       let classes = "question-card__answer";
       if (props.gameOver) {
         classes += answer.correct ? " correct-answer " : " wrong-answer ";
-        if(answer.selected & !answer.correct) classes += " wrong-user-answer ";
+        if (answer.selected & !answer.correct) classes += " wrong-user-answer ";
       } else if (answer.selected) {
         classes += " selected-answer";
       }
-        return (
-          <li
-            key={nanoid()}
-            className={classes}
-            onClick={props.selectAnswer}
-          >
-            {answer.text}
-          </li>
-        );
+      return (
+        <li
+          key={nanoid()}
+          className={classes}
+          onClick={props.selectAnswer}
+          data-answernumber={answer.answerNumber}
+          dangerouslySetInnerHTML={{ __html: answer.text }}
+        >
+        </li>
+      );
     });
 
     // создаем готовую карточку с вопросом и ответами
     return (
-      <div key={nanoid()} data-questionnumber={qObj.questionNumber} className="question-card">
-        <h1 className="question-card__question">{qObj.question}</h1>
+      <div
+        key={nanoid()}
+        data-questionnumber={qObj.questionNumber}
+        className="question-card"
+      >
+        <h1
+          className="question-card__question"
+          dangerouslySetInnerHTML={{ __html: qObj.question }}
+        >
+        </h1>
         <ul className="question-card__answers">{answersListItems}</ul>
       </div>
     );
@@ -36,7 +45,7 @@ export default function Questions(props) {
   // создаем готовое игровое поле с карточками
   return (
     <div className="questions">
-      <div className="questions-container">{questionCards}</div>      
+      <div className="questions-container">{questionCards}</div>
     </div>
   );
 }

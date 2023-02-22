@@ -7,7 +7,7 @@ import Button from "./components/Button";
 import Result from "./components/Result";
 
 function App() {
-  const [showIntro, setShowIntro] = useState(false);
+  const [showIntro, setShowIntro] = useState(true);
   const [gameOver, setGameOver] = useState(false);
   const [questions, setQuestions] = useState("");
   const [correctAnswers, setCorrectAnswers] = useState(0);
@@ -21,6 +21,7 @@ function App() {
     return newArr;
   }
 
+  // =========================================api version==============================
   useEffect(() => {
     if (fetchQuestions) {
       fetch("https://opentdb.com/api.php?amount=5")
@@ -42,10 +43,15 @@ function App() {
                 selected: false,
                 correct: true,
               };
-              const allAnswers = shuffle([
+              let allAnswers = shuffle([
                 ...incorrectAnwersObjArray,
                 correctAnwerObj,
               ]);
+              // присвоить номера перемешанным ответам
+              allAnswers = allAnswers.map((answer, index) => ({
+                ...answer,
+                answerNumber: index,
+              }));
               return {
                 question: qObj.question,
                 questionNumber: index,
@@ -60,37 +66,41 @@ function App() {
           console.log(err.message);
         });
     }
-    
-  }, [fetchQuestions]);
 
+  }, [fetchQuestions]);
+  // =====================================end of api version==============================
+
+  // ==================================local version=================================
   // useEffect(() => {
   //   const state = localQuestions.map((qObj, index) => {
-  //           const incorrectAnwersObjArray = qObj.incorrect_answers.map(
-  //             (answer) => {
-  //               return {
-  //                 text: answer,
-  //                 selected: false,
-  //                 correct: false,
-  //               };
-  //             }
-  //           );
-  //           const correctAnwerObj = {
-  //             text: qObj.correct_answer,
-  //             selected: false,
-  //             correct: true,
-  //           };
-  //           const allAnswers = shuffle([
-  //             ...incorrectAnwersObjArray,
-  //             correctAnwerObj,
-  //           ]);
-  //           return {
-  //             question: qObj.question,
-  //             questionNumber: index,
-  //             answers: allAnswers,
-  //           };
-  //         });
-  //         setQuestions(state);
-  // }, [])
+  //     const incorrectAnwersObjArray = qObj.incorrect_answers.map((answer) => {
+  //       return {
+  //         text: answer,
+  //         selected: false,
+  //         correct: false,
+  //       };
+  //     });
+  //     const correctAnwerObj = {
+  //       text: qObj.correct_answer,
+  //       selected: false,
+  //       correct: true,
+  //     };
+  //     let allAnswers = shuffle([...incorrectAnwersObjArray, correctAnwerObj]);
+  //     // присвоить номера перемешанным ответам
+  //     allAnswers = allAnswers.map((answer, index) => ({
+  //       ...answer,
+  //       answerNumber: index,
+  //     }));
+
+  //     return {
+  //       question: qObj.question,
+  //       questionNumber: index,
+  //       answers: allAnswers,
+  //     };
+  //   });
+  //   setQuestions(state);
+  // }, []);
+  // ========================end of local version=====================================
 
   function selectAnswer(e) {
     // внутри объекта с вопросами, находим нажатый ответ и меняем его selected на true а остальных ответов на false
@@ -103,7 +113,8 @@ function App() {
             e.target.closest("div").dataset.questionnumber ===
             qObj.questionNumber.toString()
           ) {
-            return answer.text === e.target.innerText
+            return answer.answerNumber.toString() ===
+              e.target.dataset.answernumber
               ? { ...answer, selected: true }
               : { ...answer, selected: false };
           } else {
